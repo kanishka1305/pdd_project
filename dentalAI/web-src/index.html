@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dental AI</title>
+  <script>window.DENTAI_SERVER_URL = "__DENTAI_SERVER_URL__";</script>
+  <style>
+    html, body { height: 100%; margin: 0; }
+    body { display: grid; place-items: center; background: #f8fbfe; font: 15px system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; color: #1d3048; }
+    img { width: 200px; max-width: 60vw; }
+  </style>
+</head>
+<body>
+  <main><img src="__DENTAI_LOGO__" alt="Dental AI — Intelligent Oral Care" /></main>
+  <script>
+    // The app normally opens the server directly; this page only forwards to it.
+    if (window.DENTAI_SERVER_URL) window.location.replace(window.DENTAI_SERVER_URL + '/login');
+  </script>
+</body>
+</html>

@@ -1,4 +1,4 @@
-﻿"""
+"""
 DentAI Appium — Root conftest.py
 ==================================
 Provides:
@@ -9,6 +9,7 @@ Provides:
   - Pytest hooks (runtest_makereport, sessionfinish)
 """
 
+import sys
 import logging
 import time
 from datetime import datetime
@@ -17,16 +18,29 @@ from typing import Generator
 
 import pytest
 
-from appium_tests.utils.driver_factory import create_driver, quit_driver
-from appium_tests.utils.logger import setup_logger
-from appium_tests.config.config import SCREENSHOTS_DIR
-from appium_tests.utils.test_data import DEVICE_NAME, PLATFORM_VERSION
+root_dir = Path(__file__).parent.parent.resolve()
+if str(root_dir) not in sys.path:
+    sys.path.insert(0, str(root_dir))
+if str(Path(__file__).parent.resolve()) not in sys.path:
+    sys.path.insert(0, str(Path(__file__).parent.resolve()))
 
-logger = setup_logger("dentai_appium.conftest")
+try:
+    from appium_tests.utils.driver_factory import create_driver, quit_driver
+    from appium_tests.utils.logger import setup_logger
+    from appium_tests.config.config import SCREENSHOTS_DIR
+    from appium_tests.utils.test_data import DEVICE_NAME, PLATFORM_VERSION
+    logger = setup_logger("dentai_appium.conftest")
+except Exception:
+    create_driver = None
+    quit_driver = None
+    DEVICE_NAME = "Pixel_6_Pro_API_34"
+    PLATFORM_VERSION = "14.0"
+    SCREENSHOTS_DIR = Path("screenshots")
+    logger = logging.getLogger("dentai_appium.conftest")
 
 # ── Shared results store ───────────────────────────────────────────────────────
 # Collected by pytest_runtest_makereport hook and written to Excel at session end.
-_ALL_RESULTS: list[dict] = []
+_ALL_RESULTS: list = []
 
 
 # ── pytest_configure ───────────────────────────────────────────────────────────
@@ -189,8 +203,8 @@ def pytest_sessionfinish(session, exitstatus):
         print(f"\n{'='*60}")
         print(f"  APPIUM E2E REPORT GENERATED")
         print(f"{'='*60}")
-        print(f"  Excel → {excel_path}")
-        print(f"  HTML  → {html_path}")
+        print(f"  Excel -> {excel_path}")
+        print(f"  HTML  -> {html_path}")
 
         # Print summary to console
         total   = len(_ALL_RESULTS)

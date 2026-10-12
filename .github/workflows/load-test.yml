@@ -1,4 +1,4 @@
-name: load test
+name: Load Testing Suite
 on:
   push:
     branches: [ main ]
@@ -6,20 +6,27 @@ on:
 
 jobs:
   test:
+    name: Run Load Tests (300 Test Cases)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
+
       - name: Install dependencies
         run: |
           pip install pytest openpyxl
-      - name: Run tests
-        run: pytest load_testing/tests/ || true
+
+      - name: Run Load Testing Suite
+        run: pytest load_testing/tests/ -v
+
       - name: Upload Excel Artifact
         uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: Load_Test_Report
           path: load_testing/Load_Test_Report.xlsx

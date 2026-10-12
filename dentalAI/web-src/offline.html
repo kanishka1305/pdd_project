@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dental AI — offline</title>
+  <script>window.DENTAI_SERVER_URL = "__DENTAI_SERVER_URL__";</script>
+  <style>
+    :root { color-scheme: light; }
+    html, body { height: 100%; margin: 0; }
+    body {
+      display: grid; place-items: center; padding: 24px; box-sizing: border-box;
+      background: linear-gradient(180deg, #eef4fa 0%, #dce8f2 100%);
+      font: 15px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; color: #1d3048;
+    }
+    main {
+      width: 100%; max-width: 380px; padding: 28px 24px; box-sizing: border-box; text-align: center;
+      background: #f8fbfe; border: 1px solid #cedbe8; border-radius: 20px; box-shadow: 0 16px 48px rgba(29, 48, 72, .12);
+    }
+    img { width: 190px; max-width: 70%; margin-bottom: 18px; }
+    h1 { margin: 0 0 8px; font-size: 20px; }
+    p { margin: 0 0 16px; color: #536a82; }
+    code { display: block; margin: 0 0 20px; padding: 8px 10px; border-radius: 10px; background: #e8f0f7; color: #1d3048;
+           font: 13px ui-monospace, Menlo, Consolas, monospace; word-break: break-all; }
+    button {
+      width: 100%; padding: 13px 16px; border: 0; border-radius: 12px; cursor: pointer;
+      background: linear-gradient(135deg, #3479ef, #245ac6); color: #fff; font: 600 15px system-ui, sans-serif;
+    }
+    button:focus-visible { outline: 3px solid #93c5fd; outline-offset: 2px; }
+    small { display: block; margin-top: 14px; color: #71849a; font-size: 12px; }
+  </style>
+</head>
+<body>
+  <main>
+    <img src="__DENTAI_LOGO__" alt="Dental AI — Intelligent Oral Care" />
+    <h1>Can't reach the Dental AI server</h1>
+    <p>Check the internet or Wi-Fi connection, then try again.</p>
+    <code id="server">—</code>
+    <button id="retry" type="button">Try again</button>
+    <small id="status" aria-live="polite">The app retries when the connection comes back.</small>
+  </main>
+  <script>
+    const url = window.DENTAI_SERVER_URL || '';
+    document.getElementById('server').textContent = url || 'No server address set';
+    const retry = () => {
+      if (!url) return;
+      document.getElementById('status').textContent = 'Connecting…';
+      window.location.replace(url + '/login');
+    };
+    document.getElementById('retry').addEventListener('click', retry);
+    window.addEventListener('online', retry);
+  </script>
+</body>
+</html>
